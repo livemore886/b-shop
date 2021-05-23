@@ -66,13 +66,13 @@ const errorHandler = async (error: { response: Response }): Response => {
 const request = extend({
   errorHandler, // default error handling
   credentials: 'include', // Does the default request bring cookies
-  prefix:'/api'
+  prefix:'/api' // 默认前缀
 });
 
 // 请求拦截器，在请求之前，添加Header头
 request.interceptors.request.use((url:string, options:RequestOptionsInit)=>{
   // 获取token
-  const token = 'hello'
+  const token = localStorage.getItem('access_token') || ''
   // 设置Header头
   const headers={
     Authorization:`Bearer ${token}`

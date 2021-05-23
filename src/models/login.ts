@@ -3,9 +3,9 @@ import type { Reducer, Effect } from 'umi';
 import { history } from 'umi';
 
 import { fakeAccountLogin } from '@/services/login';
-import { setAuthority } from '@/utils/authority';
+
 import { getPageQuery } from '@/utils/utils';
-import { message } from 'antd';
+
 
 export type StateType = {
   status?: 'ok' | 'error';
@@ -27,41 +27,27 @@ export type LoginModelType = {
 
 const Model: LoginModelType = {
   namespace: 'login',
-
-  state: {
-    status: undefined,
+  state: {   
   },
-
   effects: {
     *login({ payload }, { call, put }) {
+      // 发送请求执行登录
       const response = yield call(fakeAccountLogin, payload);
+      // 判断是否登录成功
+      console.log('rs',response.status)
+      if(response.status===undefined){
+        yield put({
+          type: 'changeLoginStatus',
+          payload: response,
+        });
+        // 跳转到首页
+        history.replace( '/');
+      }
       yield put({
         type: 'changeLoginStatus',
         payload: response,
       });
-      // Login successfully
-      if (response.status === 'ok') {
-        const urlParams = new URL(window.location.href);
-        const params = getPageQuery();
-        message.success('🎉 🎉 🎉  登录成功！');
-        let { redirect } = params as { redirect: string };
-        if (redirect) {
-          const redirectUrlParams = new URL(redirect);
-          if (redirectUrlParams.origin === urlParams.origin) {
-            redirect = redirect.substr(urlParams.origin.length);
-            if (window.routerBase !== '/') {
-              redirect = redirect.replace(window.routerBase, '/');
-            }
-            if (redirect.match(/^\/.*#/)) {
-              redirect = redirect.substr(redirect.indexOf('#') + 1);
-            }
-          } else {
-            window.location.href = '/';
-            return;
-          }
-        }
-        history.replace(redirect || '/');
-      }
+
     },
 
     logout() {
@@ -80,11 +66,11 @@ const Model: LoginModelType = {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      setAuthority(payload.currentAuthority);
+      // 将token存入localStorage
+      localStorage.setItem('access_token',payload.access_token)
       return {
-        ...state,
-        status: payload.status,
-        type: payload.type,
+        ...state
+       
       };
     },
   },

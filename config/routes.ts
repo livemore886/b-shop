@@ -24,16 +24,23 @@
             
             routes: [
               {
-                path: '/',
+                path: '/dashboard',
+                name:'dashboard',
+                component:'@/pages/DashBoard'
                 
               },
              
-              
+            
               
               {
                 component: './404',
               },
             ],
+          },
+          {
+            path: '/dashboard',
+            component:'@/pages/DashBoard'
+            
           },
           {
             component: './404',

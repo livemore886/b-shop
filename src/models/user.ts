@@ -39,7 +39,9 @@ const UserModel: UserModelType = {
   state: {
     currentUser: {},
   },
-
+/**
+ * 获取当前登录用户数据
+ */
   effects: {
     *fetch(_, { call, put }) {
       const response = yield call(queryUsers);
