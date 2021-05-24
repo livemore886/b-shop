@@ -24,24 +24,23 @@
             
             routes: [
               {
+                path: '/',
+                redirect:'/dashboard',
+                
+              },
+              {
                 path: '/dashboard',
                 name:'dashboard',
+                icon:'BarChartOutlined',
                 component:'@/pages/DashBoard'
                 
               },
-             
-            
-              
               {
-                component: './404',
-              },
+                component:'./404'
+              }
             ],
           },
-          {
-            path: '/dashboard',
-            component:'@/pages/DashBoard'
-            
-          },
+         
           {
             component: './404',
           },

@@ -1,10 +1,11 @@
-import { stringify } from 'querystring';
+
 import type { Reducer, Effect } from 'umi';
 import { history } from 'umi';
 
-import { fakeAccountLogin } from '@/services/login';
+import { fakeAccountLogin,logout } from '@/services/login';
+import {message} from 'antd';
 
-import { getPageQuery } from '@/utils/utils';
+
 
 
 export type StateType = {
@@ -33,9 +34,11 @@ const Model: LoginModelType = {
     *login({ payload }, { call, put }) {
       // 发送请求执行登录
       const response = yield call(fakeAccountLogin, payload);
+      console.log('response', response)
       // 判断是否登录成功
       console.log('rs',response.status)
       if(response.status===undefined){
+        message.success('登录成功')
         yield put({
           type: 'changeLoginStatus',
           payload: response,
@@ -49,18 +52,23 @@ const Model: LoginModelType = {
       });
 
     },
+    // 退出登录
+    *logout(_,{call}) {
+     const load =  message.loading('退出中...')
+    // 请求API退出登录
+      const response = yield call(logout)
+      if(response.status===undefined){
+       message.success('退出成功')
+       // 删除本地存储的token和userInfo
+       localStorage.removeItem('access_token')
+       localStorage.removeItem('userInfo')
 
-    logout() {
-      const { redirect } = getPageQuery();
-      // Note: There may be security issues, please note
-      if (window.location.pathname !== '/user/login' && !redirect) {
-        history.replace({
-          pathname: '/user/login',
-          search: stringify({
-            redirect: window.location.href,
-          }),
-        });
+       // 重定向
+       history.replace('/user/login')
       }
+    load()
+    
+     
     },
   },
 

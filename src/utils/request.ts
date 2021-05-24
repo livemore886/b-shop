@@ -84,5 +84,8 @@ request.interceptors.request.use((url:string, options:RequestOptionsInit)=>{
   }
 
 })
-
+  // request.interceptors.response.use((handler: ResponseInterceptor, options?: OnionOptions)=>{
+  //   console.log('handler', handler)
+  //   console.log('handler', options)
+  // })
 export default request;

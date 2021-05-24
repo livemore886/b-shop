@@ -2,6 +2,7 @@ import type { Effect, Reducer } from 'umi';
 
 import { queryCurrent, query as queryUsers } from '@/services/user';
 
+
 export type CurrentUser = {
   avatar?: string;
   name?: string;
@@ -12,7 +13,7 @@ export type CurrentUser = {
     key: string;
     label: string;
   }[];
-  userid?: string;
+  id?: string;
   unreadCount?: number;
 };
 
@@ -52,9 +53,12 @@ const UserModel: UserModelType = {
     },
     *fetchCurrent(_, { call, put }) {
       const response = yield call(queryCurrent);
+      const myResponse = response.data[0]
+     
+
       yield put({
         type: 'saveCurrentUser',
-        payload: response,
+        payload: myResponse,
       });
     },
   },
