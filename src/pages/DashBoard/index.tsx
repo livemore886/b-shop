@@ -13,6 +13,7 @@ export default function DashBoard() {
     useEffect(async () => {
       // 发送请求获取数据
     const resData = await fetchDashBoard()
+    // 得到数据后，更新组件状态
     setData(resData)
     
     }, [])

@@ -36,6 +36,13 @@
                 
               },
               {
+                path: '/userList',
+                name:'userList',
+                icon:'TeamOutlined',
+                component:'@/pages/UserList'
+                
+              },
+              {
                 component:'./404'
               }
             ],
